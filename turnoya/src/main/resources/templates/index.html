@@ -12,7 +12,7 @@
     input, select, button, textarea { margin: 5px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
     button { background-color: #007bff; color: white; cursor: pointer; border: none; }
     button:hover { background-color: #0056b3; }
-    #logoutBtn { background-color: #dc3545; padding: 10px 15px; border-radius: 5px; display: none; }
+    #logoutBtn { background-color: #dc3545; border: none; padding: 10px 15px; border-radius: 5px; color: white; cursor: pointer; display: none; }
     #logoutBtn:hover { background-color: #c82333; }
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
@@ -24,27 +24,29 @@
 </head>
 <body>
   <header>
-    <div><h1 style="margin:0;">TurnoYA</h1><p style="margin:0;">Encuentra o publica trabajos fácilmente</p></div>
+    <div>
+      <h1 style="margin: 0;">TurnoYA</h1>
+      <p style="margin: 0;">Encuentra o publica trabajos fácilmente</p>
+    </div>
     <button id="logoutBtn" onclick="cerrarSesion()">Cerrar sesión</button>
   </header>
 
   <main>
 
-    <!-- LOGIN -->
     <div id="auth-section" class="form-section">
       <h2>Iniciar sesión / Registrarse</h2>
-      <input type="text" id="usuario" placeholder="Usuario">
-      <input type="password" id="contrasena" placeholder="Contraseña">
+      <input type="text" id="usuario" placeholder="Usuario" required>
+      <input type="password" id="contrasena" placeholder="Contraseña" required>
       <select id="rol">
         <option value="trabajador">Trabajador</option>
         <option value="empresa">Empresa</option>
-      </select><br>
+      </select>
+      <br>
       <button onclick="login()">Iniciar sesión</button>
       <button onclick="registrar()">Registrarse</button>
       <p id="auth-msg"></p>
     </div>
 
-    <!-- BUSCAR TURNOS -->
     <div id="buscador-section" class="form-section hidden">
       <h2>Buscar Turnos</h2>
       <input type="text" id="ciudad" placeholder="Ciudad">
@@ -58,49 +60,61 @@
       </select>
       <input type="number" id="pagoMin" placeholder="Pago mínimo">
       <button onclick="buscarTurnos()">Buscar</button>
-
       <table id="tablaTurnos">
-        <thead><tr><th>Título</th><th>Categoría</th><th>Fecha</th><th>Dirección</th><th>Ciudad</th><th>Pago</th><th>Empresa</th><th>Acciones</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Título</th><th>Categoría</th><th>Fecha</th><th>Dirección</th>
+            <th>Ciudad</th><th>Pago</th><th>Empresa</th><th>Acciones</th>
+          </tr>
+        </thead>
         <tbody></tbody>
       </table>
     </div>
 
-    <!-- PUBLICAR TURNO -->
     <div id="publicar-section" class="form-section hidden">
       <h2>Publicar nuevo turno</h2>
-      <input type="text" id="titulo" placeholder="Título"><br>
+      <input type="text" id="titulo" placeholder="Título del trabajo" required><br>
       <select id="categoriaPub">
-        <option value="">Seleccione categoría</option><option value="Eventos">Eventos</option><option value="Técnico">Técnico</option><option value="Hogar">Hogar</option><option value="Logística">Logística</option><option value="Atención">Atención</option>
+        <option value="">Seleccione categoría</option>
+        <option value="Eventos">Eventos</option>
+        <option value="Técnico">Técnico</option>
+        <option value="Hogar">Hogar</option>
+        <option value="Logística">Logística</option>
+        <option value="Atención">Atención</option>
       </select><br>
-      <input type="date" id="fecha"><br>
-      <input type="text" id="direccion" placeholder="Dirección"><br>
-      <input type="text" id="ciudadPub" placeholder="Ciudad"><br>
-      <input type="number" id="pago" placeholder="Pago"><br>
+      <input type="date" id="fecha" required><br>
+      <input type="text" id="direccion" placeholder="Dirección" required><br>
+      <input type="text" id="ciudadPub" placeholder="Ciudad" required><br>
+      <input type="number" id="pago" placeholder="Pago" required><br>
       <textarea id="descripcion" placeholder="Descripción del trabajo"></textarea><br>
       <button onclick="crearTurno()">Publicar</button>
       <p id="pub-msg"></p>
     </div>
 
-    <!-- POSTULACIÓN (MODAL) -->
     <div id="overlay" class="hidden" onclick="cerrarFormulario()"></div>
     <div id="formPostulacion" class="hidden">
       <h3>Formulario de Postulación</h3>
       <input type="hidden" id="turnoId">
       <input type="text" id="nombre" placeholder="Nombre completo">
-      <input type="email" id="email" placeholder="Correo">
+      <input type="email" id="email" placeholder="Correo electrónico">
       <input type="text" id="telefono" placeholder="Teléfono">
-      <textarea id="experiencia" placeholder="Experiencia"></textarea>
-      <textarea id="comentarios" placeholder="Comentarios"></textarea><br>
+      <textarea id="experiencia" placeholder="Experiencia o habilidades"></textarea>
+      <textarea id="comentarios" placeholder="Comentarios adicionales"></textarea>
+      <br>
       <button onclick="enviarPostulacion()">Enviar</button>
       <button onclick="cerrarFormulario()">Cancelar</button>
       <p id="post-msg"></p>
     </div>
 
-    <!-- POSTULACIONES (EMPRESA) -->
     <div id="postulaciones-section" class="form-section hidden">
       <h2>Postulaciones Recibidas</h2>
       <table id="tablaPostulaciones">
-        <thead><tr><th>Turno</th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Experiencia</th><th>Comentarios</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Turno</th><th>Nombre</th><th>Email</th><th>Teléfono</th>
+            <th>Experiencia</th><th>Comentarios</th>
+          </tr>
+        </thead>
         <tbody></tbody>
       </table>
     </div>
@@ -108,99 +122,183 @@
   </main>
 
 <script>
-let usuarioActual = null;
+  const API_URL = "https://turnoya-app.onrender.com";
 
-async function login() {
-  const resp = await fetch("/usuarios/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      nombreUsuario: usuario.value,
-      contrasena: contrasena.value
-    })
-  });
-  const data = await resp.json();
-  if (!data?.nombreUsuario) return auth-msg.textContent = "Credenciales incorrectas";
-  usuarioActual = data;
-  auth-section.classList.add("hidden");
-  buscador-section.classList.remove("hidden");
-  logoutBtn.style.display = "inline-block";
-  if (data.rol === "empresa") { publicar-section.classList.remove("hidden"); postulaciones-section.classList.remove("hidden"); cargarPostulaciones(); }
-  buscarTurnos();
-}
+  let usuarioActual = null;
 
-async function registrar() {
-  const resp = await fetch("/usuarios/registrar", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      nombreUsuario: usuario.value,
-      contrasena: contrasena.value,
-      rol: rol.value
-    })
-  });
-  const msg = await resp.text();
-  auth-msg.textContent = msg === "EXISTE" ? "❌ El usuario ya existe." : "✅ Registro exitoso.";
-}
+  async function login() {
+    const nombreUsuario = document.getElementById("usuario").value;
+    const contrasena = document.getElementById("contrasena").value;
 
-async function buscarTurnos() {
-  const params = new URLSearchParams();
-  if (ciudad.value) params.append("ciudad", ciudad.value);
-  if (categoria.value) params.append("categoria", categoria.value);
-  if (pagoMin.value) params.append("pagoMin", pagoMin.value);
+    const resp = await fetch(`${API_URL}/usuarios/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombreUsuario, contrasena })
+    });
 
-  const resp = await fetch(`/turnos/buscar?${params.toString()}`);
-  const data = await resp.json();
-  const tbody = tablaTurnos.querySelector("tbody");
-  tbody.innerHTML = "";
-  data.forEach(t => {
-    tbody.innerHTML += `<tr>
-      <td>${t.titulo}</td><td>${t.categoria}</td><td>${t.fecha||""}</td>
-      <td>${t.direccion}</td><td>${t.ciudad}</td>
-      <td>$${t.pago.toLocaleString()}</td><td>${t.empresa||""}</td>
-      <td>${usuarioActual?.rol==="trabajador"?`<button onclick="abrirPostulacion(${t.id})">Postularse</button>`:""}</td>
-    </tr>`;
-  });
-}
+    const data = await resp.json();
 
-async function crearTurno() {
-  const turno = {
-    titulo: titulo.value, categoria: categoriaPub.value, fecha: fecha.value,
-    direccion: direccion.value, ciudad: ciudadPub.value,
-    pago: parseFloat(pago.value), descripcion: descripcion.value,
-    empresa: usuarioActual?.nombreUsuario
-  };
-  const resp = await fetch("/turnos", { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify(turno) });
-  pub-msg.textContent = resp.ok ? "✅ Publicado." : "❌ Error.";
-  if (resp.ok) buscarTurnos();
-}
+    if (data && data.nombreUsuario) {
+      usuarioActual = data;
+      document.getElementById("auth-section").classList.add("hidden");
+      document.getElementById("buscador-section").classList.remove("hidden");
+      document.getElementById("logoutBtn").style.display = "inline-block";
 
-function abrirPostulacion(id) { formPostulacion.classList.remove("hidden"); overlay.classList.remove("hidden"); turnoId.value=id; }
-function cerrarFormulario() { formPostulacion.classList.add("hidden"); overlay.classList.add("hidden"); }
+      if (data.rol === "empresa") {
+        document.getElementById("publicar-section").classList.remove("hidden");
+        document.getElementById("postulaciones-section").classList.remove("hidden");
+        cargarPostulaciones();
+      }
 
-async function enviarPostulacion() {
-  const resp = await fetch("/postulaciones", {
-    method: "POST", headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      turnoId: turnoId.value, nombre: nombre.value, email: email.value,
-      telefono: telefono.value, experiencia: experiencia.value, comentarios: comentarios.value
-    })
-  });
-  post-msg.textContent = resp.ok ? "✅ Enviado." : "❌ Error.";
-  if (resp.ok) setTimeout(cerrarFormulario, 1500);
-}
-
-async function cargarPostulaciones() {
-  const turnos = await (await fetch("/turnos")).json();
-  const turnosEmpresa = turnos.filter(t => t.empresa === usuarioActual.nombreUsuario);
-  const tbody = tablaPostulaciones.querySelector("tbody"); tbody.innerHTML = "";
-  for (const t of turnosEmpresa) {
-    const postulaciones = await (await fetch(`/postulaciones/${t.id}`)).json();
-    postulaciones.forEach(p => tbody.innerHTML += `<tr><td>${t.titulo}</td><td>${p.nombre}</td><td>${p.email}</td><td>${p.telefono}</td><td>${p.experiencia}</td><td>${p.comentarios}</td></tr>`);
+      buscarTurnos();
+    } else {
+      document.getElementById("auth-msg").textContent = "Usuario o contraseña incorrectos";
+    }
   }
-}
-function cerrarSesion(){ location.reload(); }
-</script>
 
+  async function registrar() {
+    const nombreUsuario = document.getElementById("usuario").value;
+    const contrasena = document.getElementById("contrasena").value;
+    const rol = document.getElementById("rol").value;
+
+    const resp = await fetch(`${API_URL}/usuarios/registrar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombreUsuario, contrasena, rol })
+    });
+
+    const msg = await resp.text();
+    document.getElementById("auth-msg").textContent =
+      msg === "EXISTE" ? "❌ El usuario ya existe." : "✅ Registro exitoso.";
+  }
+
+  async function buscarTurnos() {
+    const ciudad = document.getElementById("ciudad").value;
+    const categoria = document.getElementById("categoria").value;
+    const pagoMin = document.getElementById("pagoMin").value;
+
+    const params = new URLSearchParams();
+    if (ciudad) params.append("ciudad", ciudad);
+    if (categoria) params.append("categoria", categoria);
+    if (pagoMin) params.append("pagoMin", pagoMin);
+
+    const resp = await fetch(`${API_URL}/turnos/buscar?${params.toString()}`);
+    const data = await resp.json();
+    const tbody = document.querySelector("#tablaTurnos tbody");
+    tbody.innerHTML = "";
+
+    data.forEach(t => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${t.titulo}</td>
+        <td>${t.categoria}</td>
+        <td>${t.fecha || ""}</td>
+        <td>${t.direccion}</td>
+        <td>${t.ciudad}</td>
+        <td>$${t.pago.toLocaleString()}</td>
+        <td>${t.empresa || ""}</td>
+        <td>${
+          usuarioActual?.rol === "trabajador"
+            ? `<button onclick="abrirPostulacion(${t.id})">Postularse</button>`
+            : ""
+        }</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function crearTurno() {
+    const turno = {
+      titulo: document.getElementById("titulo").value,
+      categoria: document.getElementById("categoriaPub").value,
+      fecha: document.getElementById("fecha").value,
+      direccion: document.getElementById("direccion").value,
+      ciudad: document.getElementById("ciudadPub").value,
+      pago: parseFloat(document.getElementById("pago").value),
+      descripcion: document.getElementById("descripcion").value,
+      empresa: usuarioActual?.nombreUsuario || ""
+    };
+
+    const resp = await fetch(`${API_URL}/turnos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(turno)
+    });
+
+    document.getElementById("pub-msg").textContent =
+      resp.ok ? "✅ Turno publicado correctamente." : "❌ Error al publicar.";
+    if (resp.ok) buscarTurnos();
+  }
+
+  function abrirPostulacion(turnoId) {
+    document.getElementById("formPostulacion").classList.remove("hidden");
+    document.getElementById("overlay").classList.remove("hidden");
+    document.getElementById("turnoId").value = turnoId;
+  }
+
+  function cerrarFormulario() {
+    document.getElementById("formPostulacion").classList.add("hidden");
+    document.getElementById("overlay").classList.add("hidden");
+  }
+
+  async function enviarPostulacion() {
+    const postulacion = {
+      turnoId: document.getElementById("turnoId").value,
+      nombre: document.getElementById("nombre").value,
+      email: document.getElementById("email").value,
+      telefono: document.getElementById("telefono").value,
+      experiencia: document.getElementById("experiencia").value,
+      comentarios: document.getElementById("comentarios").value
+    };
+
+    const resp = await fetch(`${API_URL}/postulaciones`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(postulacion)
+    });
+
+    document.getElementById("post-msg").textContent =
+      resp.ok ? "✅ Postulación enviada correctamente." : "❌ Error al enviar.";
+    if (resp.ok) setTimeout(cerrarFormulario, 1500);
+  }
+
+  async function cargarPostulaciones() {
+    const turnosResp = await fetch(`${API_URL}/turnos`);
+    const turnos = await turnosResp.json();
+
+    const turnosEmpresa = turnos.filter(t => t.empresa === usuarioActual.nombreUsuario);
+
+    const tbody = document.querySelector("#tablaPostulaciones tbody");
+    tbody.innerHTML = "";
+
+    for (const turno of turnosEmpresa) {
+      const resp = await fetch(`${API_URL}/postulaciones/${turno.id}`);
+      const postulaciones = await resp.json();
+
+      postulaciones.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${turno.titulo}</td>
+          <td>${p.nombre}</td>
+          <td>${p.email}</td>
+          <td>${p.telefono}</td>
+          <td>${p.experiencia}</td>
+          <td>${p.comentarios}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    if (tbody.innerHTML.trim() === "") {
+      tbody.innerHTML = "<tr><td colspan='6'>No hay postulaciones aún.</td></tr>";
+    }
+  }
+
+  function cerrarSesion() {
+    if (confirm("¿Seguro que deseas cerrar sesión?")) {
+      usuarioActual = null;
+      window.location.href = "index.html";
+    }
+  }
+</script>
 </body>
 </html>
