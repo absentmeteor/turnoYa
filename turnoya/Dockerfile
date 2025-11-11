@@ -1,18 +1,12 @@
-FROM eclipse-temurin:17-jdk
-
+# Etapa 1: Compilar con Maven
+FROM maven:3.9.8-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# Copia todos los archivos del proyecto dentro de la imagen
 COPY . .
+RUN mvn -q -DskipTests=true package
 
-# Da permisos al wrapper de Maven para poder compilar
-RUN chmod +x mvnw
-
-# Compila el proyecto y genera el jar
-RUN ./mvnw -q -DskipTests=true package
-
-# Expone el puerto usado por la app
+# Etapa 2: Imagen final ligera para ejecutar la app
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/turnoya-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-
-# Ejecuta el jar generado
-CMD ["java", "-jar", "target/turnoya-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "app.jar"]
